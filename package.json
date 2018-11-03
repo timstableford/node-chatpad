@@ -1,6 +1,6 @@
 {
   "name": "chatpad",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Xbox 360 Chatpad Serial Library",
   "main": "index.js",
   "scripts": {

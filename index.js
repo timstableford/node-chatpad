@@ -121,7 +121,7 @@ class Chatpad {
 
         if (this.callbacks['modifier']) {
             if (this.keys.modifier !== keys.modifier) {
-                this.callbacks['key']({ raw: modifier, pressed: !!keys.modifier, modifier: Map.MODIFIERS[modifier] });
+                this.callbacks['modifier']({ raw: modifier, pressed: !!keys.modifier, modifier: Map.MODIFIERS[modifier] });
             }
         }
         this.keys = keys;
