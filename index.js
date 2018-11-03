@@ -57,7 +57,7 @@ class Chatpad {
         // it's an error.
         if (data.length != CHATPAD_PACKET_LENGTH) {
             if (this.callbacks['error']) {
-                this.callbacks['error'](`Packet data length invalid: ${data.length}`);
+                this.callbacks['error'](new Error(`Packet data length invalid: ${data.length}`));
             }
             return;
         }
@@ -70,7 +70,7 @@ class Chatpad {
         // Check for expected packet types.
         if (!CHATPAD_EXPECTED_PACKETS.includes(data[0])) {
             if (this.callbacks['error']) {
-                this.callbacks['error'](`unexpected packet type ${data[0]}`);
+                this.callbacks['error'](new Error(`unexpected packet type ${data[0]}`));
             }
             return;
         }
@@ -83,7 +83,7 @@ class Chatpad {
         checksum = 256 - (checksum % 256);
         if (checksum !== data[7]) {
             if (this.callbacks['error']) {
-                this.callbacks['error'](`checksum failure expected(${checksum}), actual(${data[7]}`);
+                this.callbacks['error'](new Error(`checksum failure expected(${checksum}), actual(${data[7]}`));
             }
             return;
         }
@@ -95,7 +95,7 @@ class Chatpad {
             caps: this.keys.caps
         }
 
-        const modifier = this.keys.modifier || keys.modifier;
+        const modifier = keys.modifier || this.keys.modifier;
         if (this.keys.modifier !== keys.modifier && keys.modifier === Map.MODIFIER_CAPS) {
             keys.caps = !keys.caps;
         }
@@ -129,7 +129,17 @@ class Chatpad {
 
     async open() {
         this.port.on('data', (data) => {
-            this.processMessage(data);
+            try {
+                this.processMessage(data);
+            } catch (err) {
+                try {
+                    if (this.callbacks['error']) {
+                        this.callbacks['error'](err);
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            }
         });
         await Util.promisify(this.port.open.bind(this.port))();
 
