@@ -12,7 +12,7 @@ const Map = require('./map');
 const CHATPAD_BAUD = 19200;
 const CHATPAD_INIT = [ 0x87, 0x02, 0x8C, 0x1F, 0xCC ];
 const CHATPAD_AWAKE = [ 0x87, 0x02, 0x8C, 0x1B, 0xD0 ];
-const CHATPAD_AWAKE_TIME = 1000; // Send CHATPAD_AWAKE every interval (ms)
+const CHATPAD_AWAKE_TIME = 500; // Send CHATPAD_AWAKE every interval (ms)
 
 const CHATPAD_PACKET_LENGTH = 8;
 const CHATPAD_STATUS_BYTE = 0xA5;
