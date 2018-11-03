@@ -89,8 +89,7 @@ class Chatpad {
         }
 
         const keys = {
-            // Sorting this is odd but it makes comparing it much easier.
-            pressed: [ data[4], data[5] ].sort(),
+            pressed: [ data[4], data[5] ],
             modifier: data[3],
             caps: this.keys.caps
         }
@@ -100,21 +99,30 @@ class Chatpad {
             keys.caps = !keys.caps;
         }
 
+        function makeEvent(key, pressed) {
+            const key = this.keys.pressed[i] || keys.pressed[i];
+            const raw = {
+                key: key,
+                modifier: modifier
+            };
+            this.callbacks['key']({
+                raw: raw,
+                pressed: pressed,
+                code: Map.map(raw),
+                caps: keys.caps,
+                modifier: Map.MODIFIERS[raw.modifier]
+            });
+        }
+
         if (this.callbacks['key']) {
             for (let i = 0; i < 2; i++) {
-                if (this.keys.pressed[i] !== keys.pressed[i]) {
-                    const key = this.keys.pressed[i] || keys.pressed[i];
-                    const raw = {
-                        key: key,
-                        modifier: modifier
-                    };
-                    this.callbacks['key']({
-                        raw: raw,
-                        pressed: !!keys.pressed[i],
-                        code: Map.map(raw),
-                        caps: keys.caps,
-                        modifier: Map.MODIFIERS[raw.modifier]
-                    });
+                if (!keys.pressed.includes(this.keys.pressed[i])) {
+                    // Release this key
+                    this.callbacks['key'](makeEvent(this.keys.pressed[i], false));
+                }
+                if (!this.keys.pressed.includes(keys.pressed[i])) {
+                    // Press this key
+                    this.callbacks['key'](makeEvent(keys.pressed[i], true));
                 }
             }
         }
