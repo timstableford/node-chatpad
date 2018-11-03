@@ -18,19 +18,6 @@ const CHATPAD_PACKET_LENGTH = 8;
 const CHATPAD_STATUS_BYTE = 0xA5;
 const CHATPAD_EXPECTED_PACKETS = [ 0xB4, 0xC5 ];
 
-function compareKeys(keysA, keysB) {
-    if (!keysA || !keysB) {
-        return false;
-    }
-    if (keysA.pressed[0] !== keysB.pressed[0]) {
-        return false;
-    }
-    if (keysA.pressed[1] !== keysB.pressed[1]) {
-        return false;
-    }
-    return true;
-}
-
 class Chatpad {
     constructor(port) {
         this.port = new SerialPort(port, {
@@ -100,18 +87,17 @@ class Chatpad {
         }
 
         function makeEvent(key, pressed) {
-            const key = this.keys.pressed[i] || keys.pressed[i];
             const raw = {
                 key: key,
                 modifier: modifier
             };
-            this.callbacks['key']({
+            return {
                 raw: raw,
                 pressed: pressed,
                 code: Map.map(raw),
                 caps: keys.caps,
                 modifier: Map.MODIFIERS[raw.modifier]
-            });
+            };
         }
 
         if (this.callbacks['key']) {
