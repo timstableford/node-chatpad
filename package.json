@@ -1,0 +1,21 @@
+{
+  "name": "chatpad",
+  "version": "1.0.0",
+  "description": "Xbox 360 Chatpad Serial Library",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tim Stableford <tim.stableford@gmail.com>",
+  "keywords": [
+    "chatpad",
+    "xbox",
+    "xbox360"
+  ],
+  "homepage": "https://github.com/timstableford/node-chatpad",
+  "repository": "git://github.com/timstableford/node-chatpad.git",
+  "license": "MIT",
+  "dependencies": {
+    "serialport": "7.0.2"
+  }
+}
